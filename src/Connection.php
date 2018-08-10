@@ -12,7 +12,7 @@ class Connection
     {
         $this->connection = new \Redis();
         $this->connection->connect($url, $port);
-        $this->connection->auth($password);
+        (!is_null($password) ? $this->connection->auth($password) : null);
         $this->connection->setOption(\Redis::OPT_SERIALIZER, $serializer);
         $this->connection->setOption(\Redis::OPT_READ_TIMEOUT, -1);
     }
