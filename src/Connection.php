@@ -6,10 +6,13 @@ class Connection
 {
     const PROCESSING_QUEUE_SUFFIX = '_processing';
 
-    public function __construct($url = '127.0.0.1', $port = 6379, $serializer = \Redis::SERIALIZER_PHP)
+    private $connection;
+
+    public function __construct($url = '127.0.0.1', $port = 6379, $password = null, $serializer = \Redis::SERIALIZER_PHP)
     {
         $this->connection = new \Redis();
         $this->connection->connect($url, $port);
+        $this->connection->auth($password);
         $this->connection->setOption(\Redis::OPT_SERIALIZER, $serializer);
         $this->connection->setOption(\Redis::OPT_READ_TIMEOUT, -1);
     }

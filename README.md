@@ -66,6 +66,7 @@ $bus->dispatch(new Foo());
 redis_messenger_adapter:
     redis:
         url: '127.0.0.1'
+        password: 'qwerty'
         port: 6379
         serializer: !php/const \Redis::SERIALIZER_IGBINARY # default is \Redis::SERIALIZER_PHP
     messages:

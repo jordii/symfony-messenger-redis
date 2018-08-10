@@ -26,6 +26,7 @@ class RedisMessengerAdapterExtension extends Extension
         $connectionDefinition = new Definition(Connection::class, array(
             $config['redis']['url'],
             $config['redis']['port'],
+            $config['redis']['password'],
             $config['redis']['serializer'],
         ));
 
