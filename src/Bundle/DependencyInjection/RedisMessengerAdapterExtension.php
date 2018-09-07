@@ -27,6 +27,7 @@ class RedisMessengerAdapterExtension extends Extension
             $config['redis']['url'],
             $config['redis']['port'],
             $config['redis']['password'],
+            $config['redis']['sentinel_hosts'],
             $config['redis']['serializer'],
         ));
 
