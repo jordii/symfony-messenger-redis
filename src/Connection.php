@@ -10,10 +10,10 @@ class Connection
 
     private $connection;
 
-    public function __construct($url = '127.0.0.1', $port = 6379, $password = null, $sentinel_hosts = null, $serializer = \Redis::SERIALIZER_PHP)
+    public function __construct($url = '127.0.0.1', $port = 6379, $password = null, $sentinel_hosts = null, $service, $serializer = \Redis::SERIALIZER_PHP)
     {
         if ($sentinel_hosts && is_array($sentinel_hosts)) {
-            list($url, $port) = $this->sentinelConnection($sentinel_hosts);
+            list($url, $port) = $this->sentinelConnection($sentinel_hosts, $service);
         }
 
         $this->connection = new \Redis();
@@ -29,12 +29,15 @@ class Connection
         return new self();
     }
 
-    public function sentinelConnection($sentinel_hosts)
+    public function sentinelConnection($sentinel_hosts, $service)
     {
         foreach ($sentinel_hosts as $sentinel_host) {
             $redis = new \Redis();
             if ($redis->connect($sentinel_host, '26379')) {
-                $master = $redis->rawCommand('sentinel', 'master', 'mymaster');
+                $master = $redis->rawCommand('sentinel', 'master', $service);
+                if (!$master) {
+                    continue;
+                }
                 $master = $this->parseArrayResult($master);
                 return [$master['ip'], $master['port']];
             }
